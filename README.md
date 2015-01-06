@@ -6,11 +6,8 @@ Implementation of the framework for hydrological modelling FUSE, based on the Fo
 ### Basics
 Install and load packages
 ```R
-# Stable version
-if(!require(fuse)) install.packages("fuse", repos="http://R-Forge.R-project.org")
-# Development version
 library(devtools)
-install_github("r_fuse", username = "cvitolo", subdir = "fuse")
+install_github("ICHydro/r_fuse", subdir = "fuse")
 library(fuse)
 
 # Other packages needed to run the examples below
