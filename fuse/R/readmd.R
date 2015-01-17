@@ -2,7 +2,7 @@
 #'
 #' @param mid model id number in Model List 2011(see below for details)
 #'
-#' @return prints on the screen a desciption of the selected model
+#' @return prints on the screen a description of the selected model
 #'
 
 readmd <- function(mid) {
