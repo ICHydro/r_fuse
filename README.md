@@ -4,19 +4,16 @@ Framework for Understanding Structural Errors (FUSE, R package)
 Implementation of the framework for hydrological modelling FUSE, based on the Fortran version described in Clark et al. (2008). The package consists of two modules: Soil Moisture Accounting module (fusesma.sim) and Gamma routing module (fuserouting.sim). It also contains default parameter ranges (fusesma.ranges and fuserouting.ranges) and three data objects: DATA, parameters and modlist.
 
 ### Basics
-Install and load packages
+Install dependencies
+```R
+install.packages(c("zoo", "tgp", "BH", "Rcpp", "devtools"))
+```
+
+Install and load the FUSE package
 ```R
 library(devtools)
-install_github("ICHydro/r_fuse", subdir = "fuse")
+install_github("cvitolo/r_fuse", subdir = "fuse")
 library(fuse)
-
-# Other packages needed to run the examples below
-if(!require(zoo)) install.packages("zoo")
-library(zoo)
-if(!require(tgp)) install.packages("tgp")
-library(tgp)
-if(!require(qualV)) install.packages("qualV")
-library(qualV)
 ```
 
 Load sample data (daily time step)
@@ -77,6 +74,7 @@ mids <- c(60, 230, 342, 426)
  
 Run a multi-model calibration using the Nash-Sutcliffe efficiency as objective function
 ```R
+library(qualV)
 indices <- rep(NA,4*numberOfRuns)
 discharges <- matrix(NA,ncol=4*numberOfRuns,nrow=dim(DATA)[1])
 kCounter <- 0

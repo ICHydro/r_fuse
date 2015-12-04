@@ -26,6 +26,7 @@
 #' @param loglamb range of the mean value of the topographic index (m), default is c(5,10)
 #' @param tishape range of the shape param for the topo index Gamma dist (-), default is c(2,5)
 #' @param timedelay range of the time delay in runoff (days), default is c(0.01,5)
+#' @param params2remove vector with names of parameters to remove from the latin hypercube.
 #'
 #' @examples
 #' # For reproducible results, use set.seed() before running this function.
@@ -58,7 +59,8 @@ GenerateFUSEParameters <- function(NumberOfRuns,
                                    axv_bexp=NULL,
                                    loglamb=NULL,
                                    tishape=NULL,
-                                   timedelay=NULL) {
+                                   timedelay=NULL,
+                                   params2remove=NULL) {
 
   # require(tgp)
   # rferr_add <- rferr_mlt <- maxwatr_1 <- maxwatr_2 <- fracten <- frchzne <-   fprimqb <- rtfrac1 <- percrte <- percexp <- sacpmlt <- sacpexp <- percfrac <-   iflwrte <- baserte <- qb_powr <- qb_prms <- qbrate_2a <- qbrate_2b <- sareamax <- axv_bexp <- loglamb <- tishape <- timedelay <- NULL
@@ -199,15 +201,41 @@ GenerateFUSEParameters <- function(NumberOfRuns,
                              "tishape"=tishape,
                              "timedelay"=timedelay)
 
+    parameters[,params2remove] <- -999
+
   }
 
   if (SamplingType == "LHS") {
     # This option generates "N" parameter sets sampling the ranges using
     # a Latin Hypercube.
 
-    parameters <- tgp::lhs( NumberOfRuns, as.matrix(DefaultRanges) )
-    parameters <- data.frame(parameters)
-    names(parameters) <- c("rferr_add","rferr_mlt","maxwatr_1","maxwatr_2","fracten","frchzne","fprimqb","rtfrac1","percrte","percexp","sacpmlt","sacpexp","percfrac","iflwrte","baserte","qb_powr","qb_prms","qbrate_2a","qbrate_2b","sareamax","axv_bexp","loglamb","tishape","timedelay")
+    rferr_add <- rferr_mlt <- maxwatr_1 <- maxwatr_2 <- fracten <- frchzne <- NA
+    fprimqb <- rtfrac1 <- percrte <- percexp <- sacpmlt <- sacpexp <- NA
+    percfrac <- iflwrte <- baserte <- qb_powr <- qb_prms <- qbrate_2a <- NA
+    qbrate_2b <- sareamax <- axv_bexp <- loglamb <- tishape <- timedelay <- NA
+
+    if (!is.null(params2remove)) {
+      rows2remove <- which(row.names(DefaultRanges) %in% params2remove)
+      newRanges <- DefaultRanges[-rows2remove,]
+    }else{
+      newRanges <- DefaultRanges
+    }
+
+    temp <- tgp::lhs( NumberOfRuns, as.matrix(newRanges) )
+    for (cols in 1:length(params2remove)){
+      temp <- cbind(temp,rep(NA,dim(temp)[1]))
+    }
+    temp <- data.frame(temp)
+    names(temp) <- c(row.names(newRanges),params2remove)
+
+    parameters <- temp[,c("rferr_add","rferr_mlt","maxwatr_1","maxwatr_2",
+                       "fracten","frchzne","fprimqb","rtfrac1","percrte",
+                       "percexp","sacpmlt","sacpexp","percfrac","iflwrte",
+                       "baserte","qb_powr","qb_prms","qbrate_2a",
+                       "qbrate_2b","sareamax","axv_bexp","loglamb",
+                       "tishape","timedelay")]
+
+    parameters[is.na(parameters)] <- -999
 
   }
 
