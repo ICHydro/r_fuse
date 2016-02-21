@@ -1,12 +1,17 @@
 Framework for Understanding Structural Errors (FUSE, R package)
 ======
 
-Implementation of the framework for hydrological modelling FUSE, based on the Fortran version described in Clark et al. (2008). The package consists of two modules: Soil Moisture Accounting module (fusesma.sim) and Gamma routing module (fuserouting.sim). It also contains default parameter ranges (fusesma.ranges and fuserouting.ranges) and three data objects: DATA, parameters and modlist.
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.14005.svg)](http://dx.doi.org/10.5281/zenodo.14005)
+
+Implementation of the framework for hydrological modelling FUSE, based on the Fortran version described in Clark et al. (2008). The package consists of two modules: Soil Moisture Accounting module (fusesma.sim) and Gamma routing module (fuserouting.sim). It also contains default parameter ranges (fusesma.ranges and fuserouting.ranges) and three data objects: DATA (sample input dataset), parameters (sample parameters) and modlist (list of FUSE model structures).
+
+**To cite this software:**  
+Vitolo C., Wells P., Dobias M. and Buytaert W., R implementation of the Framework for Understanding Structural Uncertainty (fuse, R package), (2012), GitHub repository, https://github.com/cvitolo/r_rnrfa, doi: http://dx.doi.org/10.5281/zenodo.14005
 
 ### Basics
 Install dependencies
 ```R
-install.packages(c("zoo", "tgp", "BH", "Rcpp", "devtools"))
+install.packages(c("zoo", "tgp", "devtools"))
 ```
 
 Install and load the FUSE package
@@ -39,7 +44,7 @@ names(parameters) <- row.names(DefaultRanges)
 
 Alternatively, sample parameter set using built-in function
 ```R
-parameters <- GenerateFUSEParameters(100)
+parameters <- generateParameters(100)
 ```
 
 ### Example usage with 1 model structure
@@ -50,7 +55,7 @@ myMID <- 60
 
 Use the built-in function to run FUSE for the 1st sampled parameter set
 ```R
-x <- RunFUSE(DATA, parameters[1,], myDELTIM, myMID)
+x <- fuse(DATA, myMID, myDELTIM, parameters[1,])
 
 plot(x,xlab="",ylab="Streamflow [mm/day]")
 ```
@@ -60,7 +65,7 @@ Run FUSE for all the sampled parameter sets
 plot(DATA$Q,type="l",xlab="",ylab="Streamflow [mm/day]")
 allQ <- data.frame(matrix(NA,ncol=numberOfRuns,nrow=dim(DATA)[1]))
 for (i in 1:numberOfRuns){
-  allQ[,i] <- RunFUSE(DATA, parameters[i,], myDELTIM, myMID)
+  allQ[,i] <- fuse(DATA, myMID, myDELTIM, parameters[i,])
   lines(zoo(allQ[,i],order.by=index(DATA)),col="gray",lwd=0.1)
 }
 lines(DATA$Q,col="black")
@@ -88,7 +93,7 @@ for (m in 1:4){
     kCounter <- kCounter + 1
     ParameterSet <- as.list(parameters[pid,])
     
-    Qrout <- RunFUSE(DATA, parameters[pid,], myDELTIM, myMID)
+    Qrout <- fuse(DATA, myMID, myDELTIM, parameters[pid,])
  
     indices[kCounter] <- EF(DATA$Q,Qrout)  
     discharges[,kCounter] <- Qrout

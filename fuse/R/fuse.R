@@ -2,20 +2,30 @@
 #'
 #' @param DATA data.frame containing observations. It consists of 3 columns:
 #' Rainfall (P), Potential Evapo-Transpiration (E) and Streamflow (Q)
-#' @param ParameterSet list of parameters
-#' @param deltim observation time step (days)
 #' @param mid model id number in Model List 2011(see below for details)
+#' @param deltim observation time step (days)
+#' @param ParameterSet list of parameters
 #'
 #' @details The list of parameters can be generated as follows: ParameterSet <- GeneratePsetsFUSE(1).
 #'
 #' @return Simulated streamflow discharge
 #'
+#' @examples
+#' \dontrun{
+#' data(DATA)
+#' set.seed(123)
+#' parameters <- generateParameters(1)
+#' Q <- fuse(DATA, 60, 1, parameters)
+#' }
+#'
 
-RunFUSE <- function(DATA, ParameterSet, deltim, mid){
+fuse <- function(DATA, mid, deltim, ParameterSet){
 
   U <- fusesma.sim(DATA,
                    mid,
                    deltim,
+                   ParameterSet$rferr_add,
+                   ParameterSet$rferr_mlt,
                    ParameterSet$frchzne,
                    ParameterSet$fracten,
                    ParameterSet$maxwatr_1,

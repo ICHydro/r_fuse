@@ -1,66 +1,66 @@
-#' This function generates parameter sets for FUSE (Clark et al., 2008).
+#' This function generates parameter sets for FUSE models (see ranges suggested by Clark et al., 2011).
 #'
 #' @param NumberOfRuns number of samples to generate, can be any integer
 #' @param SamplingType sampling procedure to use, can be "URS" or "LHS"
 #' @param rferr_add range of the additive rainfall error (mm), default is c(0,0)
 #' @param rferr_mlt range of the multiplicative rainfall error (-), default is c(1,1)
-#' @param maxwatr_1 range of the depth of the upper soil layer (mm), default is c(25,500)
-#' @param maxwatr_2 range of the depth of the lower soil layer (mm), default is c(50,5000)
+#' @param frchzne range of the fraction tension storage in recharge zone (-), default is c(0.05,0.95)#'
 #' @param fracten range of the fraction total storage in tension storage (-), default is c(0.05,0.95)
-#' @param frchzne range of the fraction tension storage in recharge zone (-), default is c(0.05,0.95)
+#' @param maxwatr_1 range of the depth of the upper soil layer (mm), default is c(25,500)
+#' @param percfrac range of the fraction of percltn to tension storage (-), default is c(0.05,0.95)
 #' @param fprimqb range of the fraction storage in 1st baseflow reservoir (-), default is c(0.05,0.95)
+#' @param qbrate_2a range of the baseflow depletion rate 1st reservoir (day-1), default is c(0.001,0.25)
+#' @param qbrate_2b range of the baseflow depletion rate 2nd reservoir (day-1), default is c(0.001,0.25)
+#' @param qb_prms range of the baseflow depletion rate (day-1), default is c(0.001,0.25)
+#' @param maxwatr_2 range of the depth of the lower soil layer (mm), default is c(50,5000)
+#' @param baserte range of the baseflow rate (mm day-1), default is c(0.001,1000)
 #' @param rtfrac1 range of the fraction of roots in the upper layer (-), default is c(0.05,0.95)
 #' @param percrte range of the percolation rate (mm day-1), default is c(0.01,1000)
 #' @param percexp range of the percolation exponent (-), default is c(1,20)
 #' @param sacpmlt range of the SAC model percltn mult for dry soil layer (-), default is c(1,250)
 #' @param sacpexp range of the SAC model percltn exp for dry soil layer (-), default is c(1,5)
-#' @param percfrac range of the fraction of percltn to tension storage (-), default is c(0.05,0.95)
+#'
 #' @param iflwrte range of the interflow rate (mm day-1), default is c(0.01,1000)
-#' @param baserte range of the baseflow rate (mm day-1), default is c(0.001,1000)
-#' @param qb_powr range of the baseflow exponent (-), default is c(1,10)
-#' @param qb_prms range of the baseflow depletion rate (day-1), default is c(0.001,0.25)
-#' @param qbrate_2a range of the baseflow depletion rate 1st reservoir (day-1), default is c(0.001,0.25)
-#' @param qbrate_2b range of the baseflow depletion rate 2nd reservoir (day-1), default is c(0.001,0.25)
-#' @param sareamax range of the maximum saturated area (-), default is c(0.05,0.95)
 #' @param axv_bexp range of the ARNO/VIC b exponent (-), default is c(0.001,3)
+#' @param sareamax range of the maximum saturated area (-), default is c(0.05,0.95)
 #' @param loglamb range of the mean value of the topographic index (m), default is c(5,10)
 #' @param tishape range of the shape param for the topo index Gamma dist (-), default is c(2,5)
+#' @param qb_powr range of the baseflow exponent (-), default is c(1,10)
 #' @param timedelay range of the time delay in runoff (days), default is c(0.01,5)
 #' @param params2remove vector with names of parameters to remove from the latin hypercube.
 #'
 #' @examples
 #' # For reproducible results, use set.seed() before running this function.
 #' # set.seed(123)
-#' # parameters <- GenerateFUSEParameters(NumberOfRuns=1000)
+#' # parameters <- generateParameters(1)
 #'
 
-GenerateFUSEParameters <- function(NumberOfRuns,
-                                   SamplingType="LHS",
-                                   rferr_add=NULL,
-                                   rferr_mlt=NULL,
-                                   maxwatr_1=NULL,
-                                   maxwatr_2=NULL,
-                                   fracten=NULL,
-                                   frchzne=NULL,
-                                   fprimqb=NULL,
-                                   rtfrac1=NULL,
-                                   percrte=NULL,
-                                   percexp=NULL,
-                                   sacpmlt=NULL,
-                                   sacpexp=NULL,
-                                   percfrac=NULL,
-                                   iflwrte=NULL,
-                                   baserte=NULL,
-                                   qb_powr=NULL,
-                                   qb_prms=NULL,
-                                   qbrate_2a=NULL,
-                                   qbrate_2b=NULL,
-                                   sareamax=NULL,
-                                   axv_bexp=NULL,
-                                   loglamb=NULL,
-                                   tishape=NULL,
-                                   timedelay=NULL,
-                                   params2remove=NULL) {
+generateParameters <- function(NumberOfRuns, SamplingType = "LHS",
+                               rferr_add = NULL,
+                               rferr_mlt = NULL,
+                               frchzne = NULL,
+                               fracten = NULL,
+                               maxwatr_1 = NULL,
+                               percfrac = NULL,
+                               fprimqb = NULL,
+                               qbrate_2a = NULL,
+                               qbrate_2b = NULL,
+                               qb_prms = NULL,
+                               maxwatr_2 = NULL,
+                               baserte = NULL,
+                               rtfrac1 = NULL,
+                               percrte = NULL,
+                               percexp = NULL,
+                               sacpmlt = NULL,
+                               sacpexp = NULL,
+                               iflwrte = NULL,
+                               axv_bexp = NULL,
+                               sareamax = NULL,
+                               loglamb = NULL,
+                               tishape = NULL,
+                               qb_powr = NULL,
+                               timedelay = NULL,
+                               params2remove = NULL) {
 
   # require(tgp)
   # rferr_add <- rferr_mlt <- maxwatr_1 <- maxwatr_2 <- fracten <- frchzne <-   fprimqb <- rtfrac1 <- percrte <- percexp <- sacpmlt <- sacpexp <- percfrac <-   iflwrte <- baserte <- qb_powr <- qb_prms <- qbrate_2a <- qbrate_2b <- sareamax <- axv_bexp <- loglamb <- tishape <- timedelay <- NULL
