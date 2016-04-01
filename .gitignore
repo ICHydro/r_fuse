@@ -13,3 +13,5 @@
 *.Rproj
 
 tests/*
+
+fuse/src/*o
