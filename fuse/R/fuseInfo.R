@@ -3,10 +3,10 @@
 #' @param mid FUSE model structure ID number (integer from 1 to 1248).
 #'
 #' @examples
-#' # FUSEinfo(mid=60)
+#' # fuseInfo(mid=60)
 #'
 
-FUSEinfo <- function(mid) {
+fuseInfo <- function(mid) {
 
   # Model structure info #######################################################
   model <- data.frame(matrix(readmd2var(mid,number=TRUE),ncol=8,nrow=1))
