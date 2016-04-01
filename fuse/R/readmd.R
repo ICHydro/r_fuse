@@ -4,6 +4,8 @@
 #'
 #' @return prints on the screen a description of the selected model
 #'
+#' @export
+#'
 
 readmd <- function(mid) {
 
@@ -69,6 +71,8 @@ readmd <- function(mid) {
 #' @param number boolean value. If set to TRUE, the output is in num format.
 #'
 #' @return prints on the screen a desciption of the selected model
+#'
+#' @export
 #'
 
 readmd2var <- function(mid,number=FALSE) {

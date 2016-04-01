@@ -2,6 +2,8 @@
 #'
 #' @param mid FUSE model structure ID number (integer from 1 to 1248).
 #'
+#' @export
+#'
 #' @examples
 #' # fuseInfo(mid=60)
 #'

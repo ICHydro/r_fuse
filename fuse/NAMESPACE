@@ -1,4 +1,14 @@
 import(zoo)
 import(tgp)
-exportPattern("^[[:alpha:]]+")
+
+export(fuse)
+export(fuseInfo)
+export(fuserouting.sim)
+export(fuserouting.ranges)
+export(fusesma.sim)
+export(fusesma.ranges)
+export(generateParameters)
+export(readmd)
+export(readmd2var)
+
 useDynLib(fuse)

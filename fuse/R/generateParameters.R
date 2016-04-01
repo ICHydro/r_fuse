@@ -29,6 +29,8 @@
 #' @param timedelay range of the time delay in runoff (days), default is c(0.01,5)
 #' @param params2remove vector with names of parameters to remove from the latin hypercube.
 #'
+#' @export
+#'
 #' @examples
 #' # For reproducible results, use set.seed() before running this function.
 #' # set.seed(123)

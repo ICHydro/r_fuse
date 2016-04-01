@@ -10,6 +10,8 @@
 #'
 #' @return Simulated streamflow discharge
 #'
+#' @export
+#'
 #' @examples
 #' \dontrun{
 #' data(DATA)
