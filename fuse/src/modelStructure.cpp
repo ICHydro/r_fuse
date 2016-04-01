@@ -1,4 +1,6 @@
+// Use CRAN package BH for Boost headers
 
+// [[fuse::depends(BH)]]
 #include "modelStructure.h"
 
 #include <fstream>
