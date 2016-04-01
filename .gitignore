@@ -15,3 +15,5 @@
 tests/*
 
 fuse/src/*o
+
+fuse.Rcheck
