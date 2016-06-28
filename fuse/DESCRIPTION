@@ -1,28 +1,28 @@
 Package: fuse
-Type: Package
-Title: Framework for Understanding Structural Errors (FUSE)
 Version: 3.0.0
-Date: 2014-01-28
-Author: Claudia Vitolo <claudia.vitolo@gmail.com>, Peter
-    Wells <peter.wells@lutraconsulting.co.uk>, Martin Dobias
-    <martin.dobias@lutraconsulting.co.uk>
-Maintainer: Claudia Vitolo <claudia.vitolo@gmail.com>
+Date: 2012-01-01
+Title: Framework for Understanding Structural Errors
+Authors@R: c(person("Claudia", "Vitolo", role = c("aut", "cre"),
+                    email = "cvitolodev@gmail.com"),
+	           person("Peter", "Wells", role = "ctr"),
+	           person("Martin", "Dobias", role = "ctr"),
+	           person("Wouter", "Buytaert", role = "ths"))
+Author: Claudia Vitolo [aut, cre], Peter Wells [ctr], Martin Dobias [ctr],
+    Wouter Buytaert [ths]
+Maintainer: Claudia Vitolo <cvitolodev@gmail.com>
+Depends:
+    R (>= 3.1.0),
+    zoo,
+    tgp
+LinkingTo: BH, Rcpp
 Description: Implementation of the framework for hydrological modelling FUSE,
     based on the Fortran version described in Clark et al. (2008). The package
     consists of two modules: Soil Moisture Accounting module (\code{fuse.sim}) and
     Gamma routing module (\code{routgamma.sim}). It also contains default parameter
     ranges (see \code{fuse.ranges} and \code{routgamma.ranges}) and three data
     objects: DATA, parameters and modlist.
-Depends:
-    R (>= 3.0.2),
-    zoo,
-    tgp
-LinkingTo: BH, Rcpp
-License: GPL
-Repository: R-Forge
-Packaged: 2014-09-24 14:35:55 UTC; rforge
-Repository/R-Forge/Project: r-hydro
-Repository/R-Forge/Revision: 180
-Repository/R-Forge/DateTimeStamp: 2014-09-24 13:47:05
-Date/Publication: 2014-09-24 13:47:05
+License: GPL (>= 3)
+Repository: GitHub
+URL: https://github.com/ICHydro/r_fuse, http://dx.doi.org/10.5281/zenodo.14005
+BugReports: https://github.com/ICHydro/r_fuse/issues
 RoxygenNote: 5.0.1

@@ -3,15 +3,17 @@ Framework for Understanding Structural Errors (FUSE, R package)
 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.14005.svg)](http://dx.doi.org/10.5281/zenodo.14005)
 
-Implementation of the framework for hydrological modelling FUSE, based on the Fortran version described in Clark et al. (2008). The package consists of two modules: Soil Moisture Accounting module (fusesma.sim) and Gamma routing module (fuserouting.sim). It also contains default parameter ranges (fusesma.ranges and fuserouting.ranges) and three data objects: DATA (sample input dataset), parameters (sample parameters) and modlist (list of FUSE model structures).
+Implementation of the framework for hydrological modelling FUSE described in Clark et al. (2008) and based on the Fortran code provided by M. Clark in 2011. The package consists of two modules: Soil Moisture Accounting module (fusesma.sim) and Gamma routing module (fuserouting.sim). It also contains default parameter ranges (fusesma.ranges and fuserouting.ranges) and three data objects: DATA (sample input dataset), parameters (sample parameters) and modlist (list of FUSE model structures).
 
 **To cite this software:**  
-Vitolo C., Wells P., Dobias M. and Buytaert W., R implementation of the Framework for Understanding Structural Uncertainty (fuse, R package), (2012), GitHub repository, https://github.com/cvitolo/r_rnrfa, doi: http://dx.doi.org/10.5281/zenodo.14005
+Vitolo C., Wells P., Dobias M. and Buytaert W., fuse: Framework for Understanding Structural Errors, (2012), GitHub repository, https://github.com/ICHydro/r_fuse, doi: http://dx.doi.org/10.5281/zenodo.14005
 
 ### Basics
-Install dependencies
+Check if dependencies are installed. If not, install them. Then load them.
 ```R
-install.packages(c("zoo", "tgp", "devtools"))
+list.of.packages <- c("zoo", "tgp", "devtools")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
 ```
 
 Install and load the FUSE package
@@ -142,6 +144,61 @@ legend("top",
         c("TOPMODEL", "ARNOXVIC", "PRMS","SACRAMENTO"), 
         col = c("green", "blue", "pink", "orange"),
         lty = c(1, 1, 1, 1))
+```
+
+# Use fuse with hydromad
+
+[Hydromad](http://hydromad.catchment.org/) is an excellent framework for hydrological modelling, optimization, sensitivity analysis and assessment of results. It contains a large set of soil moisture accounting modules and routing functions. Thanks to Joseph Guillaume (hydromad’s maintainer), fuse is now compatible with hydromad and below are some examples Joseph provided to use fuse within the hydromad environment.
+
+```R
+# Install and load hydromad
+install.packages(c("zoo", "latticeExtra", "polynom", "car", 
+                   "Hmisc", "reshape", "DEoptim", "coda"))
+install.packages("dream", repos="http://hydromad.catchment.org")
+install.packages("hydromad", repos="http://hydromad.catchment.org")
+library(hydromad) 
+
+# Load fuse and an example dataset
+library(fuse)
+data(DATA)
+
+# Set the parameter ranges using hydromad.options
+hydromad.options(fusesma = fusesma.ranges(),
+                 fuserouting = fuserouting.ranges())
+
+# Set up the model
+modspec <- hydromad(DATA,
+                    sma = "fusesma", 
+                    routing = "fuserouting", 
+                    mid = 1:1248, 
+                    deltim = 1)
+
+# Randomly generate 1 parameter set
+myNewParameterSet <- parameterSets(coef(modspec, warn=FALSE),1,method="random")
+
+# Run a single simulation using the parameter set generated above
+modx <- update(modspec, newpars = myNewParameterSet)
+
+# Generate a summary of the result
+summary(modx)
+
+# The instantaneous runoff is
+U <- modx$U
+
+# The routed discharge is
+Qrout <- modx$fitted.values
+
+# Plot the Observed vs Simulated value
+hydromad:::xyplot.hydromad(modx)
+
+# Add the precipitation to the above plot
+hydromad:::xyplot.hydromad(modx, with.P=TRUE)
+
+# Calibrate FUSE using hydromad's fitBy method and the Shuffled Complex Evolution algorithm
+modfit <- fitBySCE(modspec)
+
+# Get a summary of the result
+summary(modfit)
 ```
 
 # Leave your feedback

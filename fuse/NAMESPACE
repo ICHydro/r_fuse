@@ -1,5 +1,6 @@
-import(zoo)
-import(tgp)
+importFrom("zoo", "coredata")
+importFrom("tgp", "lhs")
+importFrom("stats", "runif")
 
 export(fuse)
 export(fuseInfo)
