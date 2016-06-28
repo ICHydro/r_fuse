@@ -12,4 +12,8 @@
 .Rproj.user
 *.Rproj
 
-test/*
+tests/*
+
+fuse/src/*o
+
+fuse.Rcheck

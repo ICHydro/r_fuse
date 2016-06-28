@@ -4,6 +4,8 @@
 #'
 #' @return prints on the screen a description of the selected model
 #'
+#' @export
+#'
 
 readmd <- function(mid) {
 
@@ -67,12 +69,13 @@ readmd <- function(mid) {
 #'
 #' @param mid model id number in Model List 2011(see below for details)
 #' @param number boolean value. If set to TRUE, the output is in num format.
-#' @param text boolean value. If set to TRUE, the output is in text format.
 #'
 #' @return prints on the screen a desciption of the selected model
 #'
+#' @export
+#'
 
-readmd2var <- function(mid,number=FALSE,text=TRUE) {
+readmd2var <- function(mid,number=FALSE) {
 
   # load list of availabe models
   load(system.file("data/modlist.rda", package = "fuse"))

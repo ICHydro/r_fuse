@@ -1,3 +1,6 @@
+// Use CRAN package BH for Boost headers
+
+// [[fuse::depends(BH)]]
 #include "fuse.h"
 #include "modelStructure.h"
 #include "smaStructures.h"
